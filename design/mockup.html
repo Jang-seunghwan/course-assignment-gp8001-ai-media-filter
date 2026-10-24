@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AI Media Filter — website mockup</title>
+<style>
+@page { size: 1440px 1000px; margin: 0; }
+:root {
+  --bg: #f6f5f1; --paper: #ffffff; --ink: #15171c; --muted: #646a73; --line: #e2e0da;
+  --brand: #2f3bd1; --brand-soft: #eceefd;
+  --text: #0b8a78; --text-soft: #e3f4f1;
+  --img: #2f3bd1; --img-soft: #eceefd;
+  --warn: #d9480f; --warn-soft: #fff1e8; --ok: #1f9d61; --ok-soft: #e6f6ee;
+  --note: #c2255c; --note-soft: #fff0f5;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); }
+body { font-family: "Noto Sans CJK KR", "Liberation Sans", "DejaVu Sans", sans-serif; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { width: 1440px; height: 1000px; position: relative; overflow: hidden; page-break-after: always; break-after: page; background: var(--bg); }
+.page:last-child { page-break-after: auto; break-after: auto; }
+
+/* mockup meta strip (not part of the site) */
+.meta { height: 38px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; background: #22242a; color: #d7d9de; font-size: 13px; letter-spacing: .2px; }
+.meta b { color: #fff; font-weight: 500; }
+.meta .pill { background: var(--note); color: #fff; border-radius: 10px; padding: 2px 9px; font-size: 11.5px; margin-left: 10px; }
+
+/* site chrome */
+.site { position: absolute; top: 38px; left: 0; right: 0; bottom: 0; }
+.nav { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 72px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -.2px; }
+.logo i { width: 26px; height: 26px; border-radius: 8px; background: var(--brand); display: inline-block; position: relative; }
+.logo i::after { content: ""; position: absolute; left: 7px; top: 6px; width: 12px; height: 14px; border: 2.5px solid #fff; border-radius: 3px; }
+.nav .links { display: flex; gap: 30px; font-size: 14.5px; color: var(--muted); }
+.nav .links span:last-child { color: var(--brand); font-weight: 600; }
+.wrap { padding: 0 72px; }
+h1 { font-size: 54px; line-height: 1.08; letter-spacing: -1.4px; font-weight: 700; }
+h2 { font-size: 34px; letter-spacing: -.7px; font-weight: 700; line-height: 1.15; }
+h3 { font-size: 18px; font-weight: 700; letter-spacing: -.2px; }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--brand); }
+.lead { font-size: 19px; line-height: 1.55; color: #3a3f47; }
+p.body { font-size: 15.5px; line-height: 1.6; color: #3a3f47; }
+.muted { color: var(--muted); }
+.card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; }
+
+/* placeholders */
+.ph { background: repeating-linear-gradient(135deg, #e4e3de 0 9px, #eeede9 9px 18px); color: #7b7f86; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; line-height: 1.4; font-weight: 500; }
+.ph.dark { background: repeating-linear-gradient(135deg, #2c2f36 0 9px, #343841 9px 18px); color: #a5aab3; }
+
+/* annotation */
+.note { border: 1.5px dashed var(--note); background: var(--note-soft); color: #8f1d47; border-radius: 10px; padding: 9px 12px; font-size: 13px; line-height: 1.5; }
+.note b { color: var(--note); }
+.pin { position: absolute; width: 24px; height: 24px; border-radius: 50%; background: var(--note); color: #fff; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px #fff; z-index: 5; }
+.notes-list { display: flex; flex-direction: column; gap: 10px; }
+.notes-list .note { display: flex; gap: 10px; }
+.notes-list .n { flex: 0 0 22px; height: 22px; border-radius: 50%; background: var(--note); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+/* tags */
+.tag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; letter-spacing: .6px; padding: 3px 8px; border-radius: 6px; }
+.tag.text { background: var(--text-soft); color: var(--text); }
+.tag.img { background: var(--img-soft); color: var(--img); }
+
+/* phone */
+.phone { position: relative; border-radius: 42px; background: #0d0e11; padding: 10px; box-shadow: 0 30px 60px -30px rgba(20,22,30,.45); }
+.screen { position: relative; width: 100%; height: 100%; border-radius: 33px; overflow: hidden; background: #000; }
+.screen .ph.dark { position: absolute; inset: 0; }
+.notch { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 90px; height: 24px; border-radius: 14px; background: #0d0e11; z-index: 3; }
+.topbar { position: absolute; top: 40px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; color: #fff; font-size: 12.5px; font-weight: 600; z-index: 2; }
+.x { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.chip { position: absolute; top: 78px; left: 50%; transform: translateX(-50%); background: rgba(20,22,28,.78); color: #fff; font-size: 12.5px; font-weight: 600; padding: 7px 13px; border-radius: 20px; display: flex; align-items: center; gap: 7px; white-space: nowrap; z-index: 2; }
+.chip.ok { background: var(--ok); }
+.spin { width: 12px; height: 12px; border-radius: 50%; border: 2px solid rgba(255,255,255,.35); border-top-color: #fff; }
+.actions { position: absolute; right: 12px; bottom: 120px; display: flex; flex-direction: column; gap: 16px; z-index: 2; }
+.actions span { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.2); display: block; }
+.caption { position: absolute; left: 14px; right: 60px; bottom: 34px; color: #fff; z-index: 2; }
+.caption .lbl { display: inline-block; font-size: 11px; font-weight: 600; background: rgba(255,255,255,.18); padding: 4px 9px; border-radius: 8px; }
+.progress { position: absolute; left: 14px; right: 14px; bottom: 16px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.25); z-index: 2; }
+.progress i { display: block; height: 100%; width: 38%; background: #fff; border-radius: 2px; }
+.dim { position: absolute; inset: 0; background: rgba(0,0,0,.5); z-index: 3; }
+.wcard { position: absolute; left: 10px; right: 10px; bottom: 10px; background: #fff; border-radius: 22px; padding: 16px 16px 14px; z-index: 4; }
+.wcard .t { font-size: 16px; font-weight: 700; color: var(--warn); display: flex; gap: 6px; align-items: center; }
+.wcard .s { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+.wcard .r { font-size: 12.5px; line-height: 1.5; color: #2b2f36; margin-top: 10px; background: #f6f5f1; border-radius: 10px; padding: 9px 10px; }
+.wcard .btns { display: flex; gap: 8px; margin-top: 12px; }
+.wcard .btns div { flex: 1; text-align: center; font-size: 13px; font-weight: 700; padding: 10px 0; border-radius: 12px; }
+.wcard .b1 { background: var(--ink); color: #fff; }
+.wcard .b2 { background: #ecebe6; color: var(--ink); }
+.wcard .err { margin-top: 10px; font-size: 11.5px; line-height: 1.45; color: #8f1d47; background: var(--note-soft); border-radius: 9px; padding: 7px 9px; }
+
+/* grid inside phone */
+.appbar { position: absolute; top: 34px; left: 0; right: 0; padding: 0 14px; z-index: 2; }
+.appbar .row1 { display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 14px; font-weight: 700; padding: 6px 2px 10px; }
+.seg { display: flex; background: #22252c; border-radius: 12px; padding: 3px; font-size: 11.5px; font-weight: 600; color: #a7acb5; }
+.seg div { flex: 1; text-align: center; padding: 7px 0; border-radius: 9px; }
+.seg .on { background: #fff; color: var(--ink); }
+.seg-note { color: #8d929b; font-size: 10.5px; margin-top: 6px; text-align: center; }
+.grid { position: absolute; top: 132px; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; align-content: start; }
+.tile { position: relative; aspect-ratio: 1 / 1; }
+.tile .ph.dark { position: absolute; inset: 0; font-size: 10.5px; }
+.badge { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; z-index: 2; font-family: "DejaVu Sans", sans-serif; }
+.badge.w { background: var(--warn); } .badge.o { background: var(--ok); }
+
+table.res { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+table.res th { text-align: left; font-size: 12px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 9px 10px; border-bottom: 1px solid var(--line); }
+table.res td { padding: 11px 10px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+table.res tr:last-child td { border-bottom: 0; }
+.sym { font-family: "DejaVu Sans", sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- ========================= PAGE 1: HERO + PROBLEM ========================= -->
+<section class="page">
+  <div class="meta"><span><b>AI Media Filter</b> · 웹사이트 목업 <span class="pill">분홍 점선 = 설명 메모 (사이트에는 안 나옴)</span></span><span>1 / 6 · 소개와 문제 · 데스크톱 1440px</span></div>
+  <div class="site">
+    <div class="nav">
+      <div class="logo"><i></i>AI Media Filter</div>
+      <div class="links"><span>Problem</span><span>Method</span><span>Results</span><span>Try the feed ↓</span></div>
+    </div>
+
+    <div class="wrap" style="display:grid; grid-template-columns: 1fr 270px 250px; gap: 44px; padding-top: 40px;">
+      <div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span class="eyebrow">GP8001 · Group K3</span>
+          <span style="font-size:13px; color:var(--muted); margin-left:6px;">Seunghwan Jang, <span style="color:#a3a7ae">Team member 2, Team member 3, Team member 4</span></span>
+        </div>
+        <h1 style="margin-top:18px; max-width: 700px; font-size:50px;">Can an AI spot brainrot if we just tell it what brainrot is?</h1>
+        <p class="lead" style="margin-top:20px; max-width: 700px;">We gave an off-the-shelf video-language model a short written definition of split-screen “sludge” — no training at all — and measured how its judgement changed on 267 short videos. It reads each clip’s frames <em>and</em> the text of what is said in it.</p>
+
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 26px;">
+          <div class="card" style="padding:18px 20px;"><div style="font-size:30px; font-weight:700; letter-spacing:-.6px;">267</div><div class="muted" style="font-size:13.5px; margin-top:2px;">test clips from TikTok and YouTube</div></div>
+          <div class="card" style="padding:18px 20px;"><div style="font-size:26px; font-weight:700; letter-spacing:-.6px; white-space:nowrap;">0.637 <span style="color:var(--muted); font-weight:400;">→</span> <span style="color:var(--brand)">0.989</span></div><div class="muted" style="font-size:13.5px; margin-top:2px;">accuracy, before → after adding the definition</div></div>
+          <div class="card" style="padding:18px 20px;"><div style="font-size:30px; font-weight:700; letter-spacing:-.6px;">0</div><div class="muted" style="font-size:13.5px; margin-top:2px;">training — the definition is just prompt text</div></div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:28px; align-items:center;">
+          <div style="background:var(--ink); color:#fff; font-weight:600; font-size:15px; padding:13px 22px; border-radius:12px;">Try the feed ↓</div>
+          <div style="font-weight:600; font-size:15px; padding:13px 18px; border-radius:12px; border:1px solid var(--line); background:#fff;">How it works</div>
+        </div>
+      </div>
+
+      <div style="position:relative;">
+        <div class="phone" style="width:270px; height:520px;">
+          <div class="screen">
+            <div class="ph dark">▶ 히어로 영상 자리<br>(경고 카드가 뜨는 장면을<br>짧게 반복 재생)</div>
+            <div class="notch"></div>
+            <div class="dim"></div>
+            <div class="wcard">
+              <div class="t"><span class="sym">⚠</span> Possible brainrot</div>
+              <div class="s">Split-screen sludge · score 1.00 · threshold 0.50</div>
+              <div class="r">“The video displays two unrelated scenes simultaneously: a cartoon scene from The Simpsons … and a real-life shredder destroying various objects …”</div>
+              <div class="btns"><div class="b1">Skip it</div><div class="b2">Keep watching</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="pin" style="left:-12px; top:200px;">1</div>
+      </div>
+      <div class="notes-list" style="padding-top:20px;">
+        <div class="note"><span class="n">1</span><div><b>히어로 영상 자리</b> — 데모 영상의 경고 장면을 짧게 반복 재생합니다. 영상이 정해지기 전까지는 회색 자리표시입니다. 경고 카드 문구는 c044의 실제 결과입니다.</div></div>
+        <div class="note"><span class="n">T</span><div><b>텍스트 입력 표시</b> — 첫 문단에 “frames <i>and</i> the text of what is said”를 넣어, 전사문(텍스트)도 입력으로 쓴다는 점을 첫 화면부터 밝힙니다.</div></div>
+        <div class="note"><span class="n">?</span><div><b>팀원 2–4</b>는 자리표시라 연한 회색입니다. 이름은 site.json 한 곳에서 바꿉니다.</div></div>
+      </div>
+    </div>
+
+    <!-- problem band -->
+    <div style="position:absolute; left:0; right:0; bottom:0; height:280px; background:var(--paper); border-top:1px solid var(--line);">
+      <div class="wrap" style="display:grid; grid-template-columns: 420px 1fr; gap: 64px; padding-top: 36px;">
+        <div>
+          <div class="eyebrow">The problem</div>
+          <h2 style="margin-top:10px;">Platforms flag what is illegal, not what is empty.</h2>
+        </div>
+        <div>
+          <p class="body" style="font-size:16.5px;">TikTok, Instagram and YouTube already remove scams and label deepfakes. Brainrot breaks no rule — it is exactly what a feed tuned for watch time is built to serve — so nothing tells the viewer when a clip is merely hollow. We ask whether a model can give that signal, and say why in one sentence.</p>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:20px;">
+            <div class="card" style="padding:14px 16px; background:var(--ok-soft); border-color:#cdebdc;"><div style="font-size:12px; font-weight:700; color:var(--ok); letter-spacing:.5px;">ALREADY FLAGGED</div><div style="font-size:14.5px; margin-top:4px;">Scams, deepfakes, illegal content</div></div>
+            <div class="card" style="padding:14px 16px; background:var(--warn-soft); border-color:#f6d6c3;"><div style="font-size:12px; font-weight:700; color:var(--warn); letter-spacing:.5px;">NO SIGNAL TODAY</div><div style="font-size:14.5px; margin-top:4px;">Hollow, attention-bait content (“brainrot”)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= PAGE 2: METHOD ========================= -->
+<section class="page">
+  <div class="meta"><span><b>AI Media Filter</b> · 웹사이트 목업</span><span>2 / 6 · 방법 · 데스크톱 1440px</span></div>
+  <div class="site" style="background:var(--bg);">
+    <div class="wrap" style="padding-top: 40px;">
+      <div class="eyebrow">Method</div>
+      <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+        <h2 style="margin-top:8px;">One clip, three inputs, one sentence back.</h2>
+        <div style="display:flex; gap:10px; align-items:center; font-size:13px; color:var(--muted);">
+          <span class="tag img">IMAGE</span> what the model sees
+          <span class="tag text" style="margin-left:10px;">TEXT</span> what the model reads and writes
+        </div>
+      </div>
+
+      <!-- pipeline -->
+      <div class="card" style="margin-top:20px; padding: 18px 20px 14px;">
+        <svg width="1256" height="300" viewBox="0 0 1256 300" font-family="Noto Sans CJK KR, Liberation Sans, sans-serif">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8f98"/></marker>
+            <marker id="aht" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0b8a78"/></marker>
+            <marker id="ahi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f3bd1"/></marker>
+          </defs>
+          <!-- clip -->
+          <rect x="4" y="100" width="150" height="96" rx="14" fill="#fff" stroke="#c9c7c0"/>
+          <rect x="22" y="116" width="36" height="64" rx="7" fill="#e4e3de"/>
+          <text x="70" y="140" font-size="15" font-weight="700" fill="#15171c">Short clip</text>
+          <text x="70" y="160" font-size="12.5" fill="#646a73">≤ 60 s · video</text>
+          <text x="70" y="177" font-size="12.5" fill="#646a73">+ audio</text>
+
+          <!-- frames branch -->
+          <path d="M154 130 C 200 130, 200 48, 246 48" fill="none" stroke="#2f3bd1" stroke-width="2" marker-end="url(#ahi)"/>
+          <rect x="250" y="12" width="250" height="72" rx="12" fill="#eceefd" stroke="#2f3bd1" stroke-width="1.4"/>
+          <rect x="266" y="26" width="26" height="44" rx="4" fill="#c9cdf7"/><rect x="296" y="26" width="26" height="44" rx="4" fill="#c9cdf7"/><rect x="326" y="26" width="26" height="44" rx="4" fill="#c9cdf7"/>
+          <text x="364" y="42" font-size="14.5" font-weight="700" fill="#2f3bd1">Frames</text>
+          <text x="364" y="61" font-size="12.5" fill="#3a3f8f">1 per second</text>
+
+          <!-- transcript branch -->
+          <path d="M154 166 C 200 166, 200 148, 246 148" fill="none" stroke="#0b8a78" stroke-width="2" marker-end="url(#aht)"/>
+          <rect x="250" y="106" width="250" height="84" rx="12" fill="#e3f4f1" stroke="#0b8a78" stroke-width="1.4"/>
+          <text x="266" y="128" font-size="14.5" font-weight="700" fill="#0b8a78">Speech → text</text>
+          <text x="266" y="147" font-size="12.5" fill="#20635a">Whisper transcript</text>
+          <rect x="266" y="156" width="218" height="24" rx="6" fill="#fff" stroke="#a9dcd4"/>
+          <text x="275" y="172" font-size="11.5" fill="#20635a">“[전사문 일부 — 실제 클립에서 채움]”</text>
+
+          <!-- prompt branch -->
+          <rect x="250" y="210" width="250" height="84" rx="12" fill="#e3f4f1" stroke="#0b8a78" stroke-width="1.4"/>
+          <text x="266" y="232" font-size="14.5" font-weight="700" fill="#0b8a78">Prompt text</text>
+          <text x="266" y="252" font-size="12.5" fill="#20635a">P0 · “Is this video brainrot?”</text>
+          <text x="266" y="272" font-size="12.5" fill="#20635a">P1 · same question + our definition</text>
+          <text x="266" y="287" font-size="10.5" fill="#5c8f87">written by us, not from the clip</text>
+
+          <!-- into model -->
+          <path d="M500 48 C 540 48, 540 128, 576 128" fill="none" stroke="#2f3bd1" stroke-width="2" marker-end="url(#ahi)"/>
+          <path d="M500 148 L 576 148" fill="none" stroke="#0b8a78" stroke-width="2" marker-end="url(#aht)"/>
+          <path d="M500 252 C 540 252, 540 168, 576 168" fill="none" stroke="#0b8a78" stroke-width="2" marker-end="url(#aht)"/>
+          <rect x="580" y="96" width="200" height="104" rx="14" fill="#15171c"/>
+          <text x="680" y="138" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Qwen3-VL-4B</text>
+          <text x="680" y="160" text-anchor="middle" font-size="12.5" fill="#b9bdc6">zero-shot · no training</text>
+          <text x="680" y="178" text-anchor="middle" font-size="12.5" fill="#b9bdc6">one RTX 4090, ~2 s per clip</text>
+
+          <!-- output -->
+          <path d="M780 148 L 836 148" fill="none" stroke="#0b8a78" stroke-width="2" marker-end="url(#aht)"/>
+          <rect x="840" y="88" width="230" height="120" rx="12" fill="#e3f4f1" stroke="#0b8a78" stroke-width="1.4"/>
+          <text x="856" y="110" font-size="14.5" font-weight="700" fill="#0b8a78">Text out</text>
+          <text x="856" y="134" font-size="12" fill="#20635a" font-family="DejaVu Sans Mono, monospace">{"score": 1.00,</text>
+          <text x="856" y="152" font-size="12" fill="#20635a" font-family="DejaVu Sans Mono, monospace"> "reason": "Two unrelated</text>
+          <text x="856" y="170" font-size="12" fill="#20635a" font-family="DejaVu Sans Mono, monospace">  scenes play at the</text>
+          <text x="856" y="188" font-size="12" fill="#20635a" font-family="DejaVu Sans Mono, monospace">  same time …"}</text>
+
+          <!-- decision -->
+          <path d="M1070 128 C 1100 128, 1100 92, 1124 92" fill="none" stroke="#8a8f98" stroke-width="2" marker-end="url(#ah)"/>
+          <path d="M1070 168 C 1100 168, 1100 204, 1124 204" fill="none" stroke="#8a8f98" stroke-width="2" marker-end="url(#ah)"/>
+          <rect x="1128" y="66" width="124" height="52" rx="12" fill="#fff1e8" stroke="#d9480f"/>
+          <text x="1190" y="88" text-anchor="middle" font-size="13.5" font-weight="700" fill="#d9480f">⚠ Warn</text>
+          <text x="1190" y="106" text-anchor="middle" font-size="11.5" fill="#9a3a10">score ≥ threshold</text>
+          <rect x="1128" y="178" width="124" height="52" rx="12" fill="#e6f6ee" stroke="#1f9d61"/>
+          <text x="1190" y="200" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f9d61">✓ Pass</text>
+          <text x="1190" y="218" text-anchor="middle" font-size="11.5" fill="#17744a">score below it</text>
+        </svg>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+          <p class="body" style="font-size:14.5px;"><b style="color:var(--text)">Text is used three times:</b> the clip’s speech goes in as a transcript, our definition goes in as prompt text, and the verdict comes out as a score with a one-sentence reason.</p>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 470px; gap: 26px; margin-top: 22px;">
+        <!-- definition cards -->
+        <div>
+          <h3>Our definition, in five cases</h3>
+          <p class="body muted" style="font-size:14px; margin-top:4px;">This exact text is what P1 adds to the prompt.</p>
+          <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 12px;">
+            <div class="card" style="padding:12px; border-color:#f3c9b1; background:var(--warn-soft);">
+              <svg width="44" height="66"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#d9480f"/><rect x="6" y="6" width="32" height="26" rx="3" fill="#f6b48f"/><rect x="6" y="35" width="32" height="25" rx="3" fill="#9fb2f2"/></svg>
+              <div style="font-size:13.5px; font-weight:700; margin-top:8px;">Split-screen sludge</div>
+              <div style="font-size:11.5px; font-weight:700; color:var(--warn); margin-top:2px;">BRAINROT</div>
+              <div style="font-size:12px; color:#5b5f66; margin-top:5px; line-height:1.45;">Unrelated videos on one screen, e.g. gameplay under a TV clip</div>
+            </div>
+            <div class="card" style="padding:12px;">
+              <svg width="44" height="66"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#9aa0a8"/><rect x="6" y="6" width="32" height="26" rx="3" fill="#d5d8de"/><rect x="6" y="35" width="32" height="25" rx="3" fill="#d5d8de"/><path d="M22 30 v8" stroke="#1f9d61" stroke-width="2.5"/></svg>
+              <div style="font-size:13.5px; font-weight:700; margin-top:8px;">Reaction or duet</div>
+              <div style="font-size:11.5px; font-weight:700; color:var(--ok); margin-top:2px;">NOT BRAINROT</div>
+              <div style="font-size:12px; color:#5b5f66; margin-top:5px; line-height:1.45;">One panel responds to the other</div>
+            </div>
+            <div class="card" style="padding:12px;">
+              <svg width="44" height="66"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#9aa0a8"/><rect x="6" y="6" width="32" height="26" rx="3" fill="#c8d7cf"/><rect x="6" y="35" width="32" height="25" rx="3" fill="#c8d7cf"/></svg>
+              <div style="font-size:13.5px; font-weight:700; margin-top:8px;">Co-op split screen</div>
+              <div style="font-size:11.5px; font-weight:700; color:var(--ok); margin-top:2px;">NOT BRAINROT</div>
+              <div style="font-size:12px; color:#5b5f66; margin-top:5px; line-height:1.45;">Every panel shows the same game</div>
+            </div>
+            <div class="card" style="padding:12px;">
+              <svg width="44" height="66"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#9aa0a8"/><rect x="6" y="6" width="32" height="54" rx="3" fill="#d5d8de"/><rect x="24" y="9" width="11" height="13" rx="2" fill="#8d96a3"/></svg>
+              <div style="font-size:13.5px; font-weight:700; margin-top:8px;">Picture-in-picture</div>
+              <div style="font-size:11.5px; font-weight:700; color:var(--ok); margin-top:2px;">NOT BRAINROT</div>
+              <div style="font-size:12px; color:#5b5f66; margin-top:5px; line-height:1.45;">A streamer’s camera over the gameplay</div>
+            </div>
+            <div class="card" style="padding:12px;">
+              <svg width="44" height="66"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#9aa0a8"/><rect x="6" y="6" width="32" height="54" rx="3" fill="#d5d8de"/></svg>
+              <div style="font-size:13.5px; font-weight:700; margin-top:8px;">Single feed</div>
+              <div style="font-size:11.5px; font-weight:700; color:var(--muted); margin-top:2px;">NOT BRAINROT · OUT OF SCOPE</div>
+              <div style="font-size:12px; color:#5b5f66; margin-top:5px; line-height:1.45;">Any style, incl. fast-cut edits or AI characters</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P0 vs P1 -->
+        <div>
+          <h3>Same clip, same model — only the prompt text changed</h3>
+          <div class="ph" style="height:74px; border-radius:12px; margin-top:12px;">프레임 4장 자리 · 클립 c020 (영화 장면 + DIY 공예)</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
+            <div class="card" style="padding:12px;">
+              <div style="display:flex; justify-content:space-between;"><span style="font-size:12px; font-weight:700; color:var(--muted);">P0 · NO DEFINITION</span><span style="font-size:12px; font-weight:700; color:var(--ok);">0.03 ✓</span></div>
+              <div style="font-size:12.5px; line-height:1.5; margin-top:6px; color:#2b2f36;">“The video is a creative DIY craft tutorial with a nostalgic gaming theme, not promoting harmful or inappropriate content.”</div>
+            </div>
+            <div class="card" style="padding:12px; border-color:#f3c9b1;">
+              <div style="display:flex; justify-content:space-between;"><span style="font-size:12px; font-weight:700; color:var(--muted);">P1 · WITH DEFINITION</span><span style="font-size:12px; font-weight:700; color:var(--warn);">1.00 ⚠</span></div>
+              <div style="font-size:12.5px; line-height:1.5; margin-top:6px; color:#2b2f36;">“The video displays two unrelated scenes simultaneously: a movie clip featuring a woman and a boy playing a video game, and a DIY craft tutorial …”</div>
+            </div>
+          </div>
+          <div style="font-size:12.5px; color:var(--muted); margin-top:8px;">Without a definition, the model judged <i>harm</i>. With it, the model looked at the screen layout.</div>
+        </div>
+      </div>
+    </div>
+        <div class="note" style="position:absolute; left:72px; bottom:22px; width:820px;"><b>메모</b> 텍스트가 쓰이는 곳(전사문 입력, 프롬프트 입력, 결과 출력)을 초록색 TEXT로 칠해 그림에서 바로 구분되게 했습니다. 전사문 칸의 문장은 실제 클립(c020)의 전사문으로 바꿔 넣습니다.</div>
+  </div>
+</section>
+
+<!-- ========================= PAGE 3: RESULTS ========================= -->
+<section class="page">
+  <div class="meta"><span><b>AI Media Filter</b> · 웹사이트 목업</span><span>3 / 6 · 결과 · 데스크톱 1440px</span></div>
+  <div class="site">
+    <div class="wrap" style="padding-top: 40px;">
+      <div class="eyebrow">Results</div>
+      <h2 style="margin-top:8px;">The definition did most of the work.</h2>
+      <p class="lead" style="font-size:17px; margin-top:8px; max-width: 900px;">267 test clips (146 sludge, 121 not), each run once with each prompt after both prompts were frozen. A clip is flagged when its score reaches 0.5.</p>
+
+      <div style="display:grid; grid-template-columns: 640px 1fr; gap: 28px; margin-top: 22px;">
+        <div class="card" style="padding: 22px 24px;">
+          <h3>Accuracy</h3>
+          <div style="margin-top:16px;">
+            <div style="display:flex; justify-content:space-between; font-size:14px;"><span>P0 · no definition</span><b>0.637</b></div>
+            <div style="height:16px; background:#ecebe6; border-radius:8px; margin-top:6px;"><div style="width:63.7%; height:100%; background:#9aa0a8; border-radius:8px;"></div></div>
+            <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:14px;"><span>P1 · with our definition</span><b style="color:var(--brand)">0.989</b></div>
+            <div style="height:16px; background:#ecebe6; border-radius:8px; margin-top:6px;"><div style="width:98.9%; height:100%; background:var(--brand); border-radius:8px;"></div></div>
+            <div class="muted" style="font-size:13px; margin-top:10px;">94 more clips judged correctly. P1 missed no sludge clip; P0 missed 36.</div>
+          </div>
+          <table class="res" style="margin-top:20px;">
+            <tr><th>Prompt</th><th>TP / FP / FN / TN</th><th>Precision</th><th>Recall</th><th>Accuracy</th></tr>
+            <tr><td>P0 · no definition</td><td>110 / 61 / 36 / 60</td><td>0.643</td><td>0.753</td><td>0.637</td></tr>
+            <tr><td><b>P1 · definition</b></td><td><b>146 / 3 / 0 / 118</b></td><td><b>0.980</b></td><td><b>1.000</b></td><td><b>0.989</b></td></tr>
+          </table>
+          <div class="muted" style="font-size:12px; margin-top:10px;">TP: sludge clip flagged · FP: normal clip flagged. For scale only: a model fine-tuned on this dataset reports 96.67% on the full 300-clip test split.</div>
+        </div>
+
+        <div>
+          <div class="card" style="padding: 20px 22px;">
+            <h3>We checked by hand</h3>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px;">
+              <div style="background:var(--ok-soft); border-radius:12px; padding:12px;"><div style="font-size:24px; font-weight:700;">7 / 7</div><div style="font-size:12.5px; color:#335; margin-top:2px;">dataset labels correct</div></div>
+              <div style="background:var(--ok-soft); border-radius:12px; padding:12px;"><div style="font-size:24px; font-weight:700;">9 / 10</div><div style="font-size:12.5px; color:#335; margin-top:2px;">reasons match the screen</div></div>
+              <div style="background:var(--warn-soft); border-radius:12px; padding:12px;"><div style="font-size:24px; font-weight:700;">3</div><div style="font-size:12.5px; color:#335; margin-top:2px;">false positives, all explained</div></div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+            <div class="card" style="padding: 14px 16px;">
+              <div style="font-size:12px; font-weight:700; color:var(--warn); letter-spacing:.4px;">ERROR · 2 CLIPS</div>
+              <div style="font-size:14.5px; font-weight:700; margin-top:4px;">Streamer camera over gameplay</div>
+              <div style="font-size:13px; line-height:1.5; color:#41464e; margin-top:5px;">The screen is split, but the panels belong together. Our definition excludes this case; the model still called them “unrelated”.</div>
+              <div class="muted" style="font-size:11.5px; margin-top:6px;">No image: real faces.</div>
+            </div>
+            <div class="card" style="padding: 14px 16px;">
+              <div style="font-size:12px; font-weight:700; color:var(--warn); letter-spacing:.4px;">ERROR · 1 CLIP</div>
+              <div style="font-size:14.5px; font-weight:700; margin-top:4px;">A split that was not there</div>
+              <div class="ph" style="height:48px; border-radius:8px; margin-top:6px;">프레임 자리 · c012</div>
+              <div style="font-size:13px; line-height:1.5; color:#41464e; margin-top:6px;">Single-screen anime clip; the model described several close-ups shown at once.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 22px;">
+        <div class="card" style="padding: 18px 22px;">
+          <h3>Limits</h3>
+          <ul style="margin: 10px 0 0 18px; font-size:14px; line-height:1.65; color:#3a3f47;">
+            <li>The test set keeps only clips whose labels were clear-cut, so 0.989 is optimistic for a real feed.</li>
+            <li>One brainrot type only: split-screen sludge.</li>
+            <li>The model reads what is said, not how it sounds — the voice itself is not an input.</li>
+            <li>Both prompts start with “You are a content-safety assistant”, which may push P0 toward judging harm.</li>
+          </ul>
+        </div>
+        <div class="card" style="padding: 18px 22px;">
+          <h3>Next</h3>
+          <p class="body" style="font-size:14px; margin-top:10px;">Other types — AI-generated characters, AI-voiced slideshows, fast-cut edits — need labelled clips that no public dataset we found provides. A model that hears audio would be needed to judge synthetic voices.</p>
+        </div>
+      </div>
+    </div>
+    <div class="note" style="position:absolute; right:72px; top:44px; width:360px;"><b>메모</b> 결과 수치는 제안서 Table 4 그대로입니다. “The model reads what is said, not how it sounds” 한 줄로, 텍스트(전사문)는 쓰지만 목소리 자체는 안 쓴다는 점을 밝힙니다.</div>
+  </div>
+</section>
+
+<!-- ========================= PAGE 4: FEED (GRID) ========================= -->
+<section class="page">
+  <div class="meta"><span><b>AI Media Filter</b> · 웹사이트 목업</span><span>4 / 6 · 피드 데모 (그리드) · 데스크톱 1440px</span></div>
+  <div class="site">
+    <div class="wrap" style="display:grid; grid-template-columns: 440px 400px 1fr; gap: 48px; padding-top: 44px;">
+      <div>
+        <div class="eyebrow">Try the feed</div>
+        <h2 style="margin-top:8px;">Tap a clip. The filter checks it as it plays.</h2>
+        <p class="body" style="margin-top:14px;">Clean clips get a small check and keep playing. Split-screen sludge gets a warning with the model’s one-sentence reason — skip it or keep watching.</p>
+        <p class="body" style="margin-top:12px;">Switch the prompt at the top of the phone to replay the same clips <b>without</b> our definition and see which verdicts change.</p>
+        <div class="card" style="padding:14px 16px; margin-top:18px;">
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px;"><span class="badge o" style="position:static;">✓</span> Checked — score below the threshold</div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; margin-top:8px;"><span class="badge w" style="position:static;">!</span> Possible brainrot — warning shown</div>
+        </div>
+        <div style="margin-top:16px; font-size:13px; line-height:1.55; color:var(--muted); border-left:3px solid var(--line); padding-left:12px;">Simulated feed: results were computed offline with Qwen3-VL-4B and are replayed here. Nothing runs in your browser.</div>
+      </div>
+
+      <div style="position:relative;">
+        <div class="phone" style="width:380px; height:800px;">
+          <div class="screen" style="background:#101114;">
+            <div class="notch"></div>
+            <div class="appbar">
+              <div class="row1"><span>AI Media Filter</span><span style="font-size:11px; color:#8d929b; font-weight:500;">18 clips</span></div>
+              <div class="seg"><div>P0 · no definition</div><div class="on">P1 · with definition</div></div>
+              <div class="seg-note">P1 adds our written definition to the prompt</div>
+            </div>
+            <div class="grid">
+              <div class="tile"><div class="ph dark">clip 01</div><div class="badge w">!</div></div>
+              <div class="tile"><div class="ph dark">clip 02</div></div>
+              <div class="tile"><div class="ph dark">clip 03</div><div class="badge o">✓</div></div>
+              <div class="tile"><div class="ph dark">clip 04</div></div>
+              <div class="tile"><div class="ph dark">clip 05</div></div>
+              <div class="tile"><div class="ph dark">clip 06</div></div>
+              <div class="tile"><div class="ph dark">clip 07</div></div>
+              <div class="tile"><div class="ph dark">clip 08</div><div class="badge w">!</div></div>
+              <div class="tile"><div class="ph dark">clip 09</div></div>
+              <div class="tile"><div class="ph dark">clip 10</div></div>
+              <div class="tile"><div class="ph dark">clip 11</div></div>
+              <div class="tile"><div class="ph dark">clip 12</div></div>
+              <div class="tile"><div class="ph dark">clip 13</div></div>
+              <div class="tile"><div class="ph dark">clip 14</div></div>
+              <div class="tile"><div class="ph dark">clip 15</div></div>
+              <div class="tile"><div class="ph dark">clip 16</div></div>
+              <div class="tile"><div class="ph dark">clip 17</div></div>
+              <div class="tile"><div class="ph dark">clip 18</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="pin" style="left:-12px; top:104px;">1</div>
+        <div class="pin" style="left:-12px; top:250px;">2</div>
+        <div class="pin" style="left:386px; top:150px;">3</div>
+        <div class="pin" style="left:386px; top:560px;">4</div>
+      </div>
+
+      <div class="notes-list" style="padding-top: 70px;">
+        <div class="note"><span class="n">1</span><div><b>프롬프트 토글</b> — 미리 저장한 P0 결과와 P1 결과를 바꿔 끼웁니다. 기본은 P1. 바꾸면 이미 본 배지가 지워집니다.</div></div>
+        <div class="note"><span class="n">2</span><div><b>3열 정사각 썸네일</b> — 휴대폰 화면 안에서만 세로로 스크롤됩니다. 처음에는 판정 표시가 없습니다.</div></div>
+        <div class="note"><span class="n">3</span><div><b>배지</b> — 클립을 열어 본 뒤에만 ✓ 또는 ! 배지가 붙습니다.</div></div>
+        <div class="note"><span class="n">4</span><div><b>클립 구성</b> — test 클립 18개(각 12초). sludge 8, 일반 8, 모델이 틀린 c012 1, 자유 1. 그중 3개 이상은 P0와 P1 판정이 다른 클립이라 토글을 바꾸면 차이가 보입니다. 일반인 얼굴이 크게 나오는 클립은 빼고, @계정명은 블러.</div></div>
+        <div class="note"><span class="n">!</span><div><b>자리표시</b> — 썸네일은 지금 회색 칸입니다. 클립이 정해지면 1초 지점 프레임으로 바뀝니다.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= PAGE 5: VIEWER STATES ========================= -->
+<section class="page">
+  <div class="meta"><span><b>AI Media Filter</b> · 웹사이트 목업</span><span>5 / 6 · 피드 데모 (영상 보기 화면의 네 가지 상태)</span></div>
+  <div class="site">
+    <div class="wrap" style="padding-top: 30px;">
+      <h3 style="font-size:20px;">썸네일을 누르면 휴대폰 화면을 꽉 채워 재생됩니다 <span class="muted" style="font-weight:400; font-size:15px;">(사이트 문구는 영어, 아래 상태 이름은 목업 설명용)</span></h3>
+      <div style="display:grid; grid-template-columns: repeat(4, 290px); gap: 40px; margin-top: 18px;">
+
+        <!-- A analyzing -->
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--note); margin-bottom:8px;">A · 분석 중 (1.2–3초)</div>
+          <div class="phone" style="width:290px; height:600px;"><div class="screen">
+            <div class="ph dark">▶ 영상 자리<br>음소거 자동 재생</div>
+            <div class="notch"></div>
+            <div class="topbar"><span>AI Media Filter</span><span class="x">✕</span></div>
+            <div class="chip"><span class="spin"></span>Analyzing…</div>
+            <div class="actions"><span></span><span></span><span></span></div>
+            <div class="caption"><span class="lbl">Dataset label: sludge</span></div>
+            <div class="progress"><i></i></div>
+          </div></div>
+        </div>
+
+        <!-- B checked -->
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--note); margin-bottom:8px;">B · 통과 (점수 &lt; 0.5)</div>
+          <div class="phone" style="width:290px; height:600px;"><div class="screen">
+            <div class="ph dark">▶ 영상 자리<br>계속 재생</div>
+            <div class="notch"></div>
+            <div class="topbar"><span>AI Media Filter</span><span class="x">✕</span></div>
+            <div class="chip ok"><span class="sym">✓</span> Checked · 0.00</div>
+            <div class="actions"><span></span><span></span><span></span></div>
+            <div class="caption"><span class="lbl">Dataset label: not sludge</span></div>
+            <div class="progress"><i style="width:55%"></i></div>
+          </div></div>
+        </div>
+
+        <!-- C warning -->
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--note); margin-bottom:8px;">C · 경고 (점수 ≥ 0.5)</div>
+          <div class="phone" style="width:290px; height:600px;"><div class="screen">
+            <div class="ph dark">▶ 영상 자리 · c044</div>
+            <div class="notch"></div>
+            <div class="topbar"><span>AI Media Filter</span><span class="x">✕</span></div>
+            <div class="dim"></div>
+            <div class="wcard">
+              <div class="t"><span class="sym">⚠</span> Possible brainrot</div>
+              <div class="s">Split-screen sludge · score 1.00 · threshold 0.50</div>
+              <div class="r">“The video displays two unrelated scenes simultaneously: a cartoon scene from The Simpsons with characters discussing marriage and a real-life shredder destroying various objects, including a clock, phone, and pop-it toy.”</div>
+              <div class="btns"><div class="b1">Skip it</div><div class="b2">Keep watching</div></div>
+              <div style="font-size:11px; color:var(--muted); margin-top:9px;">Dataset label: sludge</div>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- D model error -->
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--note); margin-bottom:8px;">D · 모델이 틀린 클립 (c012)</div>
+          <div class="phone" style="width:290px; height:600px;"><div class="screen">
+            <div class="ph dark">▶ 영상 자리 · c012</div>
+            <div class="notch"></div>
+            <div class="topbar"><span>AI Media Filter</span><span class="x">✕</span></div>
+            <div class="dim"></div>
+            <div class="wcard">
+              <div class="t"><span class="sym">⚠</span> Possible brainrot</div>
+              <div class="s">Split-screen sludge · score 0.73 · threshold 0.50</div>
+              <div class="r">“The video shows multiple unrelated anime-style character close-ups simultaneously, with no shared audio or context connecting them.”</div>
+              <div class="btns"><div class="b1">Skip it</div><div class="b2">Keep watching</div></div>
+              <div class="err"><b>Our check:</b> the model was wrong — this clip has a single screen.</div>
+              <div style="font-size:11px; color:var(--muted); margin-top:7px;">Dataset label: not sludge</div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px;">
+        <div class="note"><b>분석 시간</b> — 클립마다 실제로 잰 모델 처리 시간을 1.2–3초로 잘라 씁니다. 실시간 분석이 아니라 저장해 둔 결과를 다시 보여 주는 것입니다.</div>
+        <div class="note"><b>버튼</b> — Skip it은 다음 클립으로, Keep watching은 카드를 닫고 계속 재생합니다.</div>
+        <div class="note"><b>넘기기·닫기</b> — 위·아래 스와이프, 마우스 휠, 화살표 키로 이전·다음 클립. ✕, 아래로 끌기, Esc로 그리드로 돌아갑니다.</div>
+        <div class="note"><b>정직한 표시</b> — 데이터셋 라벨은 항상 보이고, 사람이 확인해서 모델이 틀린 것으로 본 클립에는 “Our check” 줄을 덧붙입니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= PAGE 6: MOBILE + FOOTER ========================= -->
+<section class="page">
+  <div class="meta"><span><b>AI Media Filter</b> · 웹사이트 목업</span><span>6 / 6 · 휴대폰으로 볼 때 (폭 390px) + 바닥글</span></div>
+  <div class="site">
+    <div class="wrap" style="display:grid; grid-template-columns: repeat(3, 280px) 1fr; gap: 34px; padding-top: 34px;">
+
+      <div>
+        <div style="font-size:13px; font-weight:700; color:var(--note); margin-bottom:8px;">소개 (세로로 쌓임)</div>
+        <div class="phone" style="width:280px; height:600px;"><div class="screen" style="background:var(--bg);">
+          <div style="padding:46px 16px 0;">
+            <div style="font-weight:700; font-size:13px; display:flex; gap:7px; align-items:center;"><span style="width:16px;height:16px;border-radius:5px;background:var(--brand);display:inline-block;"></span>AI Media Filter</div>
+            <div style="font-size:23px; font-weight:700; line-height:1.15; letter-spacing:-.5px; margin-top:22px;">Can an AI spot brainrot if we just tell it what brainrot is?</div>
+            <div style="font-size:12px; line-height:1.5; color:#3a3f47; margin-top:10px;">An off-the-shelf model, a short written definition, no training — tested on 267 short videos, reading both frames and speech text.</div>
+            <div class="card" style="padding:10px 12px; margin-top:14px;"><div style="font-size:19px; font-weight:700;">0.637 → <span style="color:var(--brand)">0.989</span></div><div class="muted" style="font-size:11px;">accuracy, before → after the definition</div></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+              <div class="card" style="padding:9px 10px;"><div style="font-size:17px; font-weight:700;">267</div><div class="muted" style="font-size:10.5px;">test clips</div></div>
+              <div class="card" style="padding:9px 10px;"><div style="font-size:17px; font-weight:700;">0</div><div class="muted" style="font-size:10.5px;">training</div></div>
+            </div>
+            <div style="background:var(--ink); color:#fff; font-weight:600; font-size:12.5px; padding:10px; border-radius:10px; text-align:center; margin-top:14px;">Try the feed ↓</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div>
+        <div style="font-size:13px; font-weight:700; color:var(--note); margin-bottom:8px;">방법 (그림이 세로로 바뀜)</div>
+        <div class="phone" style="width:280px; height:600px;"><div class="screen" style="background:var(--bg);">
+          <div style="padding:46px 16px 0;">
+            <div class="eyebrow" style="font-size:10.5px;">Method</div>
+            <div style="font-size:18px; font-weight:700; line-height:1.2; margin-top:4px;">One clip, three inputs, one sentence back.</div>
+            <div style="display:flex; flex-direction:column; gap:7px; margin-top:12px; font-size:11.5px;">
+              <div style="border-radius:9px; padding:8px 10px; background:#fff; border:1px solid var(--line);"><b>Short clip</b> · ≤ 60 s</div>
+              <div style="border-radius:9px; padding:8px 10px; background:var(--img-soft); border:1px solid #2f3bd1; color:#2f3bd1;"><b>Frames</b> · 1 per second <span class="tag img" style="float:right; font-size:9px; padding:1px 5px;">IMAGE</span></div>
+              <div style="border-radius:9px; padding:8px 10px; background:var(--text-soft); border:1px solid #0b8a78; color:#0b8a78;"><b>Speech → text</b> · Whisper <span class="tag text" style="float:right; font-size:9px; padding:1px 5px;">TEXT</span></div>
+              <div style="border-radius:9px; padding:8px 10px; background:var(--text-soft); border:1px solid #0b8a78; color:#0b8a78;"><b>Prompt text</b> · P0 or P1 <span class="tag text" style="float:right; font-size:9px; padding:1px 5px;">TEXT</span></div>
+              <div style="text-align:center; color:var(--muted);">↓</div>
+              <div style="border-radius:9px; padding:9px 10px; background:var(--ink); color:#fff; text-align:center;"><b>Qwen3-VL-4B</b> · no training</div>
+              <div style="text-align:center; color:var(--muted);">↓</div>
+              <div style="border-radius:9px; padding:8px 10px; background:var(--text-soft); border:1px solid #0b8a78; color:#0b8a78;"><b>Text out</b> · score + one-sentence reason <span class="tag text" style="float:right; font-size:9px; padding:1px 5px;">TEXT</span></div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px;">
+                <div style="border-radius:9px; padding:7px; background:var(--warn-soft); color:var(--warn); text-align:center; font-weight:700;">⚠ Warn</div>
+                <div style="border-radius:9px; padding:7px; background:var(--ok-soft); color:var(--ok); text-align:center; font-weight:700;">✓ Pass</div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <div>
+        <div style="font-size:13px; font-weight:700; color:var(--note); margin-bottom:8px;">피드 (휴대폰 틀 없이 전체 화면)</div>
+        <div class="phone" style="width:280px; height:600px;"><div class="screen" style="background:#101114;">
+          <div class="notch"></div>
+          <div class="appbar" style="top:34px;">
+            <div class="row1" style="font-size:12.5px;"><span>AI Media Filter</span><span style="font-size:10px; color:#8d929b; font-weight:500;">18 clips</span></div>
+            <div class="seg" style="font-size:10px;"><div>P0 · no definition</div><div class="on">P1 · definition</div></div>
+          </div>
+          <div class="grid" style="top:112px;">
+            <div class="tile"><div class="ph dark">01</div></div><div class="tile"><div class="ph dark">02</div></div><div class="tile"><div class="ph dark">03</div></div>
+            <div class="tile"><div class="ph dark">04</div></div><div class="tile"><div class="ph dark">05</div></div><div class="tile"><div class="ph dark">06</div></div>
+            <div class="tile"><div class="ph dark">07</div></div><div class="tile"><div class="ph dark">08</div></div><div class="tile"><div class="ph dark">09</div></div>
+            <div class="tile"><div class="ph dark">10</div></div><div class="tile"><div class="ph dark">11</div></div><div class="tile"><div class="ph dark">12</div></div>
+            <div class="tile"><div class="ph dark">13</div></div><div class="tile"><div class="ph dark">14</div></div><div class="tile"><div class="ph dark">15</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div>
+        <div style="font-size:13px; font-weight:700; color:var(--note); margin-bottom:8px;">바닥글 (모든 화면 공통)</div>
+        <div style="background:#1b1d22; color:#c9ccd2; border-radius:16px; padding:20px 22px; font-size:13px; line-height:1.65;">
+          <div style="color:#fff; font-weight:700; font-size:15px;">AI Media Filter</div>
+          <div style="margin-top:10px;">Clips: “YouTube &amp; TikTok Sludge/Non-Sludge Dataset 2000” (Kaggle), CC BY-NC-SA 4.0.</div>
+          <div>Model: Qwen3-VL-4B-Instruct. Transcripts: faster-whisper.</div>
+          <div style="margin-top:8px;">Results were computed offline and are replayed on this page.</div>
+          <div>Clips are shown for a course project and will be removed after grading.</div>
+          <div style="margin-top:12px; color:#fff;">GP8001 · Group K3</div>
+          <div>Seunghwan Jang, <span style="color:#7e838c">Team member 2, Team member 3, Team member 4</span></div>
+        </div>
+        <div class="notes-list" style="margin-top:16px;">
+          <div class="note"><span class="n">1</span><div><b>폭 900px 미만</b>에서는 휴대폰 틀이 사라지고, 그리드와 보기 화면이 실제 휴대폰 화면 전체를 씁니다.</div></div>
+          <div class="note"><span class="n">2</span><div><b>방법 그림</b>은 좁은 화면에서 위→아래 흐름으로 바뀌고, TEXT/IMAGE 색 구분은 그대로 유지합니다.</div></div>
+          <div class="note"><span class="n">3</span><div><b>검색 노출 막기</b>(noindex)를 넣고, 채점이 끝나면 저장소째 지웁니다.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Media Filter · GP8001 Group K3</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Course project: an off-the-shelf video-language model, given a short written definition of split-screen sludge, judged 267 short videos. Results were computed offline and are replayed here.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Can an AI spot brainrot if we just tell it what brainrot is?">
+<meta property="og:description" content="GP8001 · Group K3 course project. Accuracy 0.637 → 0.989 on 267 clips after adding a written definition — no training.">
+<meta property="og:url" content="https://jang-seunghwan.github.io/course-assignment-gp8001-ai-media-filter/">
+<meta property="og:image" content="https://jang-seunghwan.github.io/course-assignment-gp8001-ai-media-filter/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect width='26' height='26' rx='8' fill='%232f3bd1'/%3E%3Crect x='8.25' y='7.25' width='9.5' height='11.5' rx='2' fill='none' stroke='%23fff' stroke-width='2.5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-warn" viewBox="0 0 16 16"><path d="M8 1.6 15.2 14.4H.8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 6v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="12.1" r=".95" fill="currentColor"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M2.5 8.6 6.2 12.2 13.5 4.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-bang" viewBox="0 0 16 16"><path d="M8 3v6.2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="8" cy="12.6" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-close" viewBox="0 0 16 16"><path d="M3.5 3.5 12.5 12.5M12.5 3.5 3.5 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-sound-off" viewBox="0 0 16 16"><path d="M2 6h2.6L8 3v10L4.6 10H2Z" fill="currentColor"/><path d="M10.5 6l4 4M14.5 6l-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-sound-on" viewBox="0 0 16 16"><path d="M2 6h2.6L8 3v10L4.6 10H2Z" fill="currentColor"/><path d="M10.4 5.6a3.4 3.4 0 0 1 0 4.8M12.4 3.8a6 6 0 0 1 0 8.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-github" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top"><i aria-hidden="true"></i>AI Media Filter</a>
+    <nav class="links" aria-label="Sections"><a href="#problem">Problem</a><a href="#method">Method</a><a href="#results">Results</a><a href="#feed">Try the feed ↓</a></nav>
+  </div>
+</header>
+
+<main>
+<!-- ============================================================ intro -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="byline"><span class="eyebrow" data-site="course-group">GP8001 · Group K3</span><span class="team" data-site="members"></span></div>
+      <h1>Can an AI spot brainrot if we just tell it what brainrot is?</h1>
+      <p class="lead">We gave an off-the-shelf video-language model a short written definition of split-screen “sludge” — no training at all — and measured how its judgement changed on 267 short videos. It reads each clip’s frames <em>and</em> the text of what is said in it.</p>
+      <div class="stats">
+        <div class="card stat"><div class="num">267</div><div class="cap">test clips from TikTok and YouTube</div></div>
+        <div class="card stat"><div class="num delta">0.637 <span class="arrow">→</span> <span class="after">0.989</span></div><div class="cap">accuracy, before → after adding the definition</div></div>
+        <div class="card stat"><div class="num">0</div><div class="cap">training — the definition is just prompt text</div></div>
+      </div>
+      <div class="cta"><a class="btn dark" href="#feed">Try the feed ↓</a><a class="btn light" href="#method">How it works</a></div>
+    </div>
+    <div class="phone hero-phone" aria-label="Example: the warning shown for clip c044">
+      <div class="screen">
+        <video src="assets/clips/c044.mp4" poster="assets/posters/c044.jpg" muted autoplay loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
+        <div class="notch"></div>
+        <div class="dim"></div>
+        <div class="wcard">
+          <div class="t"><svg class="ico"><use href="#i-warn"/></svg> Possible brainrot</div>
+          <div class="s">Split-screen sludge · score 1.00 · threshold 0.50</div>
+          <div class="r">“The video displays two unrelated scenes simultaneously: a cartoon scene from The Simpsons … and a real-life shredder destroying various objects …”</div>
+          <div class="b" aria-hidden="true"><span class="b1">Skip it</span><span class="b2">Keep watching</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="problem">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">The problem</div>
+      <h2>Platforms flag what is illegal, not what is empty.</h2>
+    </div>
+    <div>
+      <p class="body">TikTok, Instagram and YouTube already remove scams and label deepfakes. Brainrot breaks no rule — it is exactly what a feed tuned for watch time is built to serve — so nothing tells the viewer when a clip is merely hollow. We ask whether a model can give that signal, and say why in one sentence.</p>
+      <div class="flags">
+        <div class="flag ok"><div class="k">ALREADY FLAGGED</div><div class="v">Scams, deepfakes, illegal content</div></div>
+        <div class="flag warn"><div class="k">NO SIGNAL TODAY</div><div class="v">Hollow, attention-bait content (“brainrot”)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ method -->
+<section class="section" id="method">
+  <div class="wrap">
+    <div class="eyebrow">Method</div>
+    <div class="head-row">
+      <h2>One clip, three inputs, one sentence back.</h2>
+      <div class="legend"><span class="tag img">IMAGE</span><span>what the model sees</span><span class="tag text">TEXT</span><span>what the model reads and writes</span></div>
+    </div>
+
+    <div class="card pipe">
+      <svg class="pipe-svg" viewBox="0 0 1256 300" role="img" aria-labelledby="pipe-title">
+        <title id="pipe-title">Pipeline: a short clip becomes frames (image) and a speech transcript (text); together with the prompt text they go into Qwen3-VL-4B, which writes a score and a one-sentence reason; the score decides warn or pass.</title>
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8f98"/></marker>
+          <marker id="aht" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0b8a78"/></marker>
+          <marker id="ahi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f3bd1"/></marker>
+        </defs>
+        <!-- clip -->
+        <rect x="4" y="100" width="150" height="96" rx="14" fill="#fff" stroke="#c9c7c0"/>
+        <rect x="22" y="116" width="36" height="64" rx="7" fill="#e4e3de"/>
+        <text x="70" y="140" font-size="15" font-weight="700" fill="#15171c">Short clip</text>
+        <text x="70" y="160" font-size="12.5" fill="#646a73">≤ 60 s · video</text>
+        <text x="70" y="177" font-size="12.5" fill="#646a73">+ audio</text>
+        <!-- frames branch -->
+        <path d="M154 130 C 200 130, 200 48, 246 48" fill="none" stroke="#2f3bd1" stroke-width="2" marker-end="url(#ahi)"/>
+        <rect x="250" y="12" width="250" height="72" rx="12" fill="#eceefd" stroke="#2f3bd1" stroke-width="1.4"/>
+        <rect x="266" y="26" width="26" height="44" rx="4" fill="#c9cdf7"/><rect x="296" y="26" width="26" height="44" rx="4" fill="#c9cdf7"/><rect x="326" y="26" width="26" height="44" rx="4" fill="#c9cdf7"/>
+        <text x="364" y="42" font-size="14.5" font-weight="700" fill="#2f3bd1">Frames</text>
+        <text x="364" y="61" font-size="12.5" fill="#3a3f8f">1 per second</text>
+        <!-- transcript branch (c020's real transcript, first words) -->
+        <path d="M154 166 C 200 166, 200 148, 246 148" fill="none" stroke="#0b8a78" stroke-width="2" marker-end="url(#aht)"/>
+        <rect x="250" y="106" width="250" height="84" rx="12" fill="#e3f4f1" stroke="#0b8a78" stroke-width="1.4"/>
+        <text x="266" y="128" font-size="14.5" font-weight="700" fill="#0b8a78">Speech → text</text>
+        <text x="266" y="147" font-size="12.5" fill="#20635a">Whisper transcript</text>
+        <rect x="266" y="156" width="218" height="24" rx="6" fill="#fff" stroke="#a9dcd4"/>
+        <text x="275" y="172" font-size="11.5" fill="#20635a" id="pipe-transcript">“Yeah Oh boy well moon pie this is it …”</text>
+        <!-- prompt branch -->
+        <rect x="250" y="210" width="250" height="84" rx="12" fill="#e3f4f1" stroke="#0b8a78" stroke-width="1.4"/>
+        <text x="266" y="232" font-size="14.5" font-weight="700" fill="#0b8a78">Prompt text</text>
+        <text x="266" y="252" font-size="12.5" fill="#20635a">P0 · “Is this video brainrot?”</text>
+        <text x="266" y="272" font-size="12.5" fill="#20635a">P1 · same question + our definition</text>
+        <text x="266" y="287" font-size="10.5" fill="#5c8f87">written by us, not from the clip</text>
+        <!-- into model -->
+        <path d="M500 48 C 540 48, 540 128, 576 128" fill="none" stroke="#2f3bd1" stroke-width="2" marker-end="url(#ahi)"/>
+        <path d="M500 148 L 576 148" fill="none" stroke="#0b8a78" stroke-width="2" marker-end="url(#aht)"/>
+        <path d="M500 252 C 540 252, 540 168, 576 168" fill="none" stroke="#0b8a78" stroke-width="2" marker-end="url(#aht)"/>
+        <rect x="580" y="96" width="200" height="104" rx="14" fill="#15171c"/>
+        <text x="680" y="138" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Qwen3-VL-4B</text>
+        <text x="680" y="160" text-anchor="middle" font-size="12.5" fill="#b9bdc6">zero-shot · no training</text>
+        <text x="680" y="178" text-anchor="middle" font-size="12.5" fill="#b9bdc6">one RTX 4090, ~2 s per clip</text>
+        <!-- output -->
+        <path d="M780 148 L 836 148" fill="none" stroke="#0b8a78" stroke-width="2" marker-end="url(#aht)"/>
+        <rect x="840" y="88" width="230" height="120" rx="12" fill="#e3f4f1" stroke="#0b8a78" stroke-width="1.4"/>
+        <text x="856" y="110" font-size="14.5" font-weight="700" fill="#0b8a78">Text out</text>
+        <text class="mono" x="856" y="134" font-size="12" fill="#20635a">{"score": 1.00,</text>
+        <text class="mono" x="856" y="152" font-size="12" fill="#20635a" xml:space="preserve"> "reason": "Two unrelated</text>
+        <text class="mono" x="856" y="170" font-size="12" fill="#20635a" xml:space="preserve">  scenes play at the</text>
+        <text class="mono" x="856" y="188" font-size="12" fill="#20635a" xml:space="preserve">  same time …"}</text>
+        <!-- decision -->
+        <path d="M1070 128 C 1100 128, 1100 92, 1124 92" fill="none" stroke="#8a8f98" stroke-width="2" marker-end="url(#ah)"/>
+        <path d="M1070 168 C 1100 168, 1100 204, 1124 204" fill="none" stroke="#8a8f98" stroke-width="2" marker-end="url(#ah)"/>
+        <rect x="1128" y="66" width="124" height="52" rx="12" fill="#fff1e8" stroke="#d9480f"/>
+        <use href="#i-warn" x="1161" y="77" width="13" height="13" style="color:#d9480f"/>
+        <text x="1178" y="88" font-size="13.5" font-weight="700" fill="#d9480f">Warn</text>
+        <text x="1190" y="106" text-anchor="middle" font-size="11.5" fill="#9a3a10">score ≥ threshold</text>
+        <rect x="1128" y="178" width="124" height="52" rx="12" fill="#e6f6ee" stroke="#1f9d61"/>
+        <use href="#i-check" x="1163" y="189" width="12" height="12" style="color:#1f9d61"/>
+        <text x="1178" y="200" font-size="13.5" font-weight="700" fill="#1f9d61">Pass</text>
+        <text x="1190" y="218" text-anchor="middle" font-size="11.5" fill="#17744a">score below it</text>
+      </svg>
+      <div class="pipe-mobile" aria-hidden="true">
+        <div><b>Short clip</b> · ≤ 60 s</div>
+        <div class="i"><b>Frames</b> · 1 per second <span class="tag img">IMAGE</span></div>
+        <div class="x"><b>Speech → text</b> · Whisper <span class="tag text">TEXT</span></div>
+        <div class="x"><b>Prompt text</b> · P0 or P1 <span class="tag text">TEXT</span></div>
+        <div class="arrow">↓</div>
+        <div class="m"><b>Qwen3-VL-4B</b> · no training</div>
+        <div class="arrow">↓</div>
+        <div class="x"><b>Text out</b> · score + one-sentence reason <span class="tag text">TEXT</span></div>
+        <div class="verdicts"><span class="w"><svg class="ico"><use href="#i-warn"/></svg>Warn</span><span class="p"><svg class="ico"><use href="#i-check"/></svg>Pass</span></div>
+      </div>
+      <p class="body caption"><b>Text is used three times:</b> the clip’s speech goes in as a transcript, our definition goes in as prompt text, and the verdict comes out as a score with a one-sentence reason.</p>
+    </div>
+
+    <div class="method-grid">
+      <div>
+        <h3>Our definition, in five cases</h3>
+        <p class="body muted" style="font-size:14px; margin-top:4px;">This exact text is what P1 adds to the prompt.</p>
+        <div class="defs">
+          <div class="card def br">
+            <svg width="44" height="66" aria-hidden="true"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#d9480f"/><rect x="6" y="6" width="32" height="26" rx="3" fill="#f6b48f"/><rect x="6" y="35" width="32" height="25" rx="3" fill="#9fb2f2"/></svg>
+            <div class="t">Split-screen sludge</div><div class="k">BRAINROT</div>
+            <div class="d">Unrelated videos on one screen, e.g. gameplay under a TV clip</div>
+          </div>
+          <div class="card def">
+            <svg width="44" height="66" aria-hidden="true"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#9aa0a8"/><rect x="6" y="6" width="32" height="26" rx="3" fill="#d5d8de"/><rect x="6" y="35" width="32" height="25" rx="3" fill="#d5d8de"/><path d="M22 30 v8" stroke="#1f9d61" stroke-width="2.5"/></svg>
+            <div class="t">Reaction or duet</div><div class="k">NOT BRAINROT</div>
+            <div class="d">One panel responds to the other</div>
+          </div>
+          <div class="card def">
+            <svg width="44" height="66" aria-hidden="true"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#9aa0a8"/><rect x="6" y="6" width="32" height="26" rx="3" fill="#c8d7cf"/><rect x="6" y="35" width="32" height="25" rx="3" fill="#c8d7cf"/></svg>
+            <div class="t">Co-op split screen</div><div class="k">NOT BRAINROT</div>
+            <div class="d">Every panel shows the same game</div>
+          </div>
+          <div class="card def">
+            <svg width="44" height="66" aria-hidden="true"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#9aa0a8"/><rect x="6" y="6" width="32" height="54" rx="3" fill="#d5d8de"/><rect x="24" y="9" width="11" height="13" rx="2" fill="#8d96a3"/></svg>
+            <div class="t">Picture-in-picture</div><div class="k">NOT BRAINROT</div>
+            <div class="d">A streamer’s camera over the gameplay</div>
+          </div>
+          <div class="card def">
+            <svg width="44" height="66" aria-hidden="true"><rect x="1" y="1" width="42" height="64" rx="7" fill="#fff" stroke="#9aa0a8"/><rect x="6" y="6" width="32" height="54" rx="3" fill="#d5d8de"/></svg>
+            <div class="t">Single feed</div><div class="k out">NOT BRAINROT · OUT OF SCOPE</div>
+            <div class="d">Any style, incl. fast-cut edits or AI characters</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3>Same clip, same model — only the prompt text changed</h3>
+        <div class="frames4">
+          <img src="assets/frames/c020_1.jpg" alt="Clip c020 at 20%: TV scene of a woman and a boy playing a video game above a craft video of a donut pen holder" loading="lazy">
+          <img src="assets/frames/c020_2.jpg" alt="Clip c020 at 40%: TV scene above a craft video with pink paper" loading="lazy">
+          <img src="assets/frames/c020_3.jpg" alt="Clip c020 at 60%: TV scene of the boy above a craft video of a paper cup" loading="lazy">
+          <img src="assets/frames/c020_4.jpg" alt="Clip c020 at 80%: TV scene on a sofa above a craft video of small flowers in a hand" loading="lazy">
+        </div>
+        <div class="pair" id="pair"></div>
+        <div class="pair-note">Without a definition, the model judged <i>harm</i>. With it, the model looked at the screen layout.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ results -->
+<section class="section results" id="results" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Results</div>
+    <h2 style="margin-top:8px">The definition did most of the work.</h2>
+    <p class="lead">267 test clips (146 sludge, 121 not), each run once with each prompt after both prompts were frozen. A clip is flagged when its score reaches 0.5.</p>
+
+    <div class="res-grid">
+      <div class="card acc">
+        <h3>Accuracy</h3>
+        <div style="margin-top:16px">
+          <div class="bar-row"><span>P0 · no definition</span><b>0.637</b></div>
+          <div class="bar" role="img" aria-label="P0 accuracy 63.7 percent"><i style="width:63.7%"></i></div>
+          <div class="bar-row" style="margin-top:14px"><span>P1 · with our definition</span><b style="color:var(--brand)">0.989</b></div>
+          <div class="bar" role="img" aria-label="P1 accuracy 98.9 percent"><i class="p1" style="width:98.9%"></i></div>
+          <div class="muted" style="font-size:13px; margin-top:10px">94 more clips judged correctly. P1 missed no sludge clip; P0 missed 36.</div>
+        </div>
+        <table class="res">
+          <thead><tr><th>Prompt</th><th>TP / FP / FN / TN</th><th>Precision</th><th>Recall</th><th>Accuracy</th></tr></thead>
+          <tbody>
+            <tr><td>P0 · no definition</td><td>110 / 61 / 36 / 60</td><td>0.643</td><td>0.753</td><td>0.637</td></tr>
+            <tr><td><b>P1 · definition</b></td><td><b>146 / 3 / 0 / 118</b></td><td><b>0.980</b></td><td><b>1.000</b></td><td><b>0.989</b></td></tr>
+          </tbody>
+        </table>
+        <div class="muted" style="font-size:12px; margin-top:10px">TP: sludge clip flagged · FP: normal clip flagged. For scale only: a model fine-tuned on this dataset reports 96.67% on the full 300-clip test split.</div>
+      </div>
+
+      <div>
+        <div class="card checked">
+          <h3>We checked by hand</h3>
+          <div class="boxes">
+            <div><b>7 / 7</b><span>dataset labels correct</span></div>
+            <div><b>9 / 10</b><span>reasons match the screen</span></div>
+            <div class="w"><b>3</b><span>false positives, all explained</span></div>
+          </div>
+        </div>
+        <div class="errs">
+          <div class="card err">
+            <div class="k">ERROR · 2 CLIPS</div>
+            <div class="t">Streamer camera over gameplay</div>
+            <div class="d">The screen is split, but the panels belong together. Our definition excludes this case; the model still called them “unrelated”.</div>
+            <div class="s muted">No image: real faces.</div>
+          </div>
+          <div class="card err">
+            <div class="k">ERROR · 1 CLIP</div>
+            <div class="t">A split that was not there</div>
+            <figure><img src="assets/frames/c012_1.jpg" alt="Clip c012: a single full-screen anime drawing of one character" loading="lazy"><figcaption>c012 · one screen</figcaption></figure>
+            <div class="d">Single-screen anime clip; the model described several close-ups shown at once.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two">
+      <div class="card">
+        <h3>Limits</h3>
+        <ul>
+          <li>The test set keeps only clips whose labels were clear-cut, so 0.989 is optimistic for a real feed.</li>
+          <li>One brainrot type only: split-screen sludge.</li>
+          <li>The model reads what is said, not how it sounds — the voice itself is not an input.</li>
+          <li>Both prompts start with “You are a content-safety assistant”, which may push P0 toward judging harm.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Next</h3>
+        <p class="body">Other types — AI-generated characters, AI-voiced slideshows, fast-cut edits — need labelled clips that no public dataset we found provides. A model that hears audio would be needed to judge synthetic voices.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ feed -->
+<section class="section feed" id="feed" style="padding-top:0">
+  <div class="wrap">
+    <div class="feed-copy">
+      <div class="eyebrow">Try the feed</div>
+      <h2>Tap a clip. The filter checks it as it plays.</h2>
+      <p class="body">Clean clips get a small check and keep playing. Split-screen sludge gets a warning with the model’s one-sentence reason — skip it or keep watching.</p>
+      <p class="body">Switch the prompt at the top of the phone to replay the same clips <b>without</b> our definition and see which verdicts change.</p>
+      <div class="card key">
+        <div><span class="badge o"><svg><use href="#i-check"/></svg></span> Checked — score below the threshold</div>
+        <div><span class="badge w"><svg><use href="#i-bang"/></svg></span> Possible brainrot — warning shown</div>
+      </div>
+      <div class="disclose">Simulated feed: results were computed offline with Qwen3-VL-4B and are replayed here. Nothing runs in your browser.</div>
+    </div>
+
+    <div class="phone feed-phone">
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="appbar">
+          <div class="row1"><span>AI Media Filter</span><span id="clip-count">18 clips</span></div>
+          <div class="seg" role="group" aria-label="Prompt">
+            <button type="button" data-prompt="p0" aria-pressed="false">P0 · no definition</button>
+            <button type="button" data-prompt="p1" aria-pressed="true">P1 · with definition</button>
+          </div>
+          <div class="seg-note">P1 adds our written definition to the prompt</div>
+        </div>
+        <div class="grid" id="grid" aria-label="Clips"></div>
+
+        <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Clip viewer" hidden>
+          <div class="stage" id="stage"><video id="vid" muted playsinline preload="auto"></video></div>
+          <div class="v-top" id="v-top">
+            <span>AI Media Filter</span>
+            <span class="btns">
+              <button type="button" class="round" id="mute" aria-label="Turn sound on"><svg><use href="#i-sound-off"/></svg></button>
+              <button type="button" class="round" id="close" aria-label="Close and return to the grid"><svg><use href="#i-close"/></svg></button>
+            </span>
+          </div>
+          <div class="chip gone" id="chip" role="status" aria-live="polite"></div>
+          <div class="v-actions" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="v-caption"><span class="lbl" id="v-label"></span></div>
+          <div class="v-progress" aria-hidden="true"><i id="v-prog"></i></div>
+          <div class="dim" id="dim"></div>
+          <div class="wcard" id="wcard" aria-live="polite">
+            <div class="t"><svg class="ico"><use href="#i-warn"/></svg> Possible brainrot</div>
+            <div class="s" id="w-sub"></div>
+            <div class="r" id="w-reason"></div>
+            <div class="b"><button type="button" class="b1" id="skip">Skip it</button><button type="button" class="b2" id="keep">Keep watching</button></div>
+            <div class="note" id="w-note" hidden></div>
+            <div class="lab" id="w-label"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="name">AI Media Filter</div>
+      <p class="who" data-site="footer-line">GP8001 · Group K3</p>
+      <p>Clips: “YouTube &amp; TikTok Sludge/Non-Sludge Dataset 2000” (Kaggle), CC BY-NC-SA 4.0.<br>Model: Qwen3-VL-4B-Instruct. Transcripts: faster-whisper.</p>
+      <p>Results were computed offline and are replayed on this page.<br>Clips are shown for a course project and will be removed after grading.</p>
+    </div>
+    <a class="gh" href="https://github.com/Jang-seunghwan/course-assignment-gp8001-ai-media-filter"><svg aria-hidden="true"><use href="#i-github"/></svg>Source on GitHub</a>
+  </div>
+</footer>
+
+<!-- Fallback copies so the page also works when index.html is opened as a file.
+     The live site reads assets/site.json and assets/clips.json first. Refresh with tools/embed_data.py. -->
+<script type="application/json" id="site-data">{"course":"GP8001","group":"Group K3","members":["Seunghwan Jang","Team member 2","Team member 3","Team member 4"]}</script>
+<script type="application/json" id="clips-data">[{"id":"c044","video":"assets/clips/c044.mp4","thumb":"assets/thumbs/c044.jpg","poster":"assets/posters/c044.jpg","label":"sludge","p0":{"score":0.9770226287399317,"reason":"The video combines cartoon dialogue with a shredder, creating a surreal and absurd juxtaposition.","sec":2.36},"p1":{"score":0.9999962733608097,"reason":"The video displays two unrelated scenes simultaneously: a cartoon scene from The Simpsons with characters discussing marriage and a real-life shredder destroying various objects, including a clock, phone, and pop-it toy.","sec":3.01},"note":""},{"id":"c024","video":"assets/clips/c024.mp4","thumb":"assets/thumbs/c024.jpg","poster":"assets/posters/c024.jpg","label":"not sludge","p0":{"score":0.18242558031387093,"reason":"The video shows a kitten watching a cat on a screen with green background, which is not brainrot.","sec":1.54},"p1":{"score":1.4449801345308207e-07,"reason":"A single video of a cat on a green screen is displayed, with no split-screen or multiple unrelated videos.","sec":1.75},"note":""},{"id":"c020","video":"assets/clips/c020.mp4","thumb":"assets/thumbs/c020.jpg","poster":"assets/posters/c020.jpg","label":"sludge","p0":{"score":0.03308605469641786,"reason":"The video is a creative DIY craft tutorial with a nostalgic gaming theme, not promoting harmful or inappropriate content.","sec":2.48},"p1":{"score":0.9999921107375358,"reason":"The video displays two unrelated scenes simultaneously: a movie clip featuring a woman and a boy playing a video game, and a DIY craft tutorial making a donut-shaped pen holder and a unicorn cup.","sec":2.74},"note":""},{"id":"c025","video":"assets/clips/c025.mp4","thumb":"assets/thumbs/c025.jpg","poster":"assets/posters/c025.jpg","label":"not sludge","p0":{"score":0.77729992054698,"reason":"The video features a Minecraft-style game with violent and chaotic elements, including characters resembling those from Squid Game, and exaggerated, cartoonish violence.","sec":3.03},"p1":{"score":3.65348200556395e-08,"reason":"The video features a single continuous scene with Minecraft-style characters and gameplay elements, without any split-screen or unrelated video overlays.","sec":3.13},"note":""},{"id":"c066","video":"assets/clips/c066.mp4","thumb":"assets/thumbs/c066.jpg","poster":"assets/posters/c066.jpg","label":"sludge","p0":{"score":0.9525741289411944,"reason":"The video combines cartoon violence with mundane, absurd objects being crushed, creating a surreal and darkly humorous tone.","sec":1.8},"p1":{"score":0.9999993524051881,"reason":"The video features two distinct and unrelated scenes: an animated Western show with characters and dialogue, and a real-world crushing video of various small objects under a car tire, with no clear connection between the two.","sec":2.16},"note":""},{"id":"c208","video":"assets/clips/c208.mp4","thumb":"assets/thumbs/c208.jpg","poster":"assets/posters/c208.jpg","label":"not sludge","p0":{"score":0.02931225643174513,"reason":"The video shows puppies playing and interacting in a shelter-like environment, with no offensive or inappropriate content.","sec":1.21},"p1":{"score":7.991959871028406e-11,"reason":"The video shows a single continuous scene of puppies in an enclosure with no split-screen or unrelated video panels.","sec":1.33},"note":""},{"id":"c159","video":"assets/clips/c159.mp4","thumb":"assets/thumbs/c159.jpg","poster":"assets/posters/c159.jpg","label":"sludge","p0":{"score":0.2689417653723509,"reason":"The video contains a mix of school-related dialogue and crafting activities, with no explicit or harmful content.","sec":1.87},"p1":{"score":0.9999251537652385,"reason":"The video displays two unrelated scenes simultaneously: a school hallway conversation and a DIY craft tutorial, with audio from both scenes.","sec":2.16},"note":""},{"id":"c234","video":"assets/clips/c234.mp4","thumb":"assets/thumbs/c234.jpg","poster":"assets/posters/c234.jpg","label":"not sludge","p0":{"score":0.11920293864618758,"reason":"The video showcases a lively and colorful restaurant experience with themed decor and food, not promoting harmful or inappropriate content.","sec":1.33},"p1":{"score":1.6918980102944207e-10,"reason":"The video features a single continuous scene showcasing Casa Bonita restaurant, its interior, food, and attractions without any split-screen or unrelated video overlays.","sec":1.57},"note":""},{"id":"c012","video":"assets/clips/c012.mp4","thumb":"assets/thumbs/c012.jpg","poster":"assets/posters/c012.jpg","label":"not sludge","p0":{"score":0.9626731168925041,"reason":"The video features anime-style characters with exaggerated expressions and a surreal, cartoonish aesthetic that is often associated with brainrot.","sec":1.17},"p1":{"score":0.7310585815345395,"reason":"The video shows multiple unrelated anime-style character close-ups simultaneously, with no shared audio or context connecting them.","sec":1.27},"note":"Our check: the model was wrong — this clip has a single screen."},{"id":"c037","video":"assets/clips/c037.mp4","thumb":"assets/thumbs/c037.jpg","poster":"assets/posters/c037.jpg","label":"sludge","p0":{"score":0.9975273767094737,"reason":"The video uses exaggerated and absurd imagery to mock and ridicule a character, which is a form of harmful humor.","sec":2.47},"p1":{"score":0.9999999586006235,"reason":"The video displays two unrelated clips simultaneously: an animated show featuring characters reacting to each other, and a gameplay segment of a lollipop character navigating obstacles in a colorful, physics-based game.","sec":2.79},"note":""},{"id":"c192","video":"assets/clips/c192.mp4","thumb":"assets/thumbs/c192.jpg","poster":"assets/posters/c192.jpg","label":"not sludge","p0":{"score":0.5621765591011381,"reason":"The video features cartoon characters with exaggerated expressions and a confrontational tone, which may be considered overly dramatic or inappropriate for some audiences.","sec":1.17},"p1":{"score":5.043474263807748e-07,"reason":"The video shows a single animated scene with three characters interacting, not multiple unrelated videos on screen.","sec":1.12},"note":""},{"id":"c072","video":"assets/clips/c072.mp4","thumb":"assets/thumbs/c072.jpg","poster":"assets/posters/c072.jpg","label":"sludge","p0":{"score":0.2450855683697291,"reason":"The video is a creative DIY project using popsicle sticks and glue, with no inappropriate or harmful content.","sec":2.36},"p1":{"score":0.9999996940977792,"reason":"The video features a split-screen format with unrelated content: a movie scene (likely from 'Crazy About Oklahoma') on the top half and a DIY craft tutorial using popsicle sticks on the bottom half, with no clear connection between the two.","sec":3.05},"note":""},{"id":"c160","video":"assets/clips/c160.mp4","thumb":"assets/thumbs/c160.jpg","poster":"assets/posters/c160.jpg","label":"not sludge","p0":{"score":2.902312524601589e-06,"reason":"The video shows a person handling ice and metal objects in a natural outdoor setting, which is not inherently brainrot.","sec":1.32},"p1":{"score":2.7346981016426896e-12,"reason":"The video shows a single continuous scene of a person interacting with icy equipment in a forest setting.","sec":1.44},"note":""},{"id":"c230","video":"assets/clips/c230.mp4","thumb":"assets/thumbs/c230.jpg","poster":"assets/posters/c230.jpg","label":"sludge","p0":{"score":0.8175745180598449,"reason":"The video combines cartoon scenes with a crushing toy car, which is a common form of entertainment content that may be considered brainrot.","sec":1.93},"p1":{"score":0.9999986290427253,"reason":"The video displays two unrelated cartoon scenes (Futurama and a car tire crushing various objects) simultaneously on a split screen, with audio from only one panel.","sec":2.22},"note":""},{"id":"c075","video":"assets/clips/c075.mp4","thumb":"assets/thumbs/c075.jpg","poster":"assets/posters/c075.jpg","label":"not sludge","p0":{"score":4.785095290582529e-06,"reason":"The video shows cartoon animals in a circus setting with no offensive or inappropriate content.","sec":1.79},"p1":{"score":3.978962558726916e-12,"reason":"The video shows a single animated scene with three characters in a circus setting, without any split-screen or multiple unrelated video panels.","sec":1.87},"note":""},{"id":"c186","video":"assets/clips/c186.mp4","thumb":"assets/thumbs/c186.jpg","poster":"assets/posters/c186.jpg","label":"sludge","p0":{"score":0.26894168070531194,"reason":"The video shows a boy leaving a girl a gift and a note, which is a normal, non-violent, and non-creepy interaction.","sec":2.53},"p1":{"score":0.9999898700097846,"reason":"The video features a split-screen format with unrelated content: a scene from a movie (top panel) and a DIY chocolate-making tutorial (bottom panel), with no clear connection between them.","sec":2.73},"note":""},{"id":"c001","video":"assets/clips/c001.mp4","thumb":"assets/thumbs/c001.jpg","poster":"assets/posters/c001.jpg","label":"not sludge","p0":{"score":0.006692854500575331,"reason":"The video shows a realistic perspective of an NHL photographer capturing a hockey game, with no offensive or inappropriate content.","sec":7.02},"p1":{"score":3.978962558726916e-12,"reason":"The video shows a single continuous shot from the perspective of an NHL photographer capturing a hockey game, with no split-screen or unrelated video overlays.","sec":7.36},"note":""},{"id":"c255","video":"assets/clips/c255.mp4","thumb":"assets/thumbs/c255.jpg","poster":"assets/posters/c255.jpg","label":"sludge","p0":{"score":0.22270031474554147,"reason":"The video shows a conversation between two characters and a cake decorating tutorial, with no offensive or harmful content.","sec":2.22},"p1":{"score":0.9999646437482612,"reason":"The video displays two unrelated scenes simultaneously: a TV show dialogue between a woman and a boy, and a cake decorating tutorial with close-ups of frosting and baking ingredients.","sec":2.68},"note":""}]</script>
+<script src="assets/app.js"></script>
+</body>
+</html>
