@@ -27,7 +27,7 @@ P0 asks "Is this video brainrot?" with no definition; P1 adds our definition of 
 ## Team
 
 <!-- team:start -->
-GP8001 · Group K3 · Seunghwan Jang, Team member 2, Team member 3, Team member 4
+GP8001 · Group K3 · Jang Seunghwan, Michelle Cordelia Tanjaya, Vu Xuan Lam, Azret Kamaldinov
 <!-- team:end -->
 
 ## Data, model and licenses
