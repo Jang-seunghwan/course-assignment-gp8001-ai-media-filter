@@ -20,7 +20,7 @@ TP: sludge clip flagged · FP: normal clip flagged. For scale only: a model fine
 
 ## Method
 
-![One clip, three inputs, one sentence back: frames and a speech transcript of the clip, plus our prompt text, go into Qwen3-VL-4B, which returns a score and a one-sentence reason.](docs/assets/og.png)
+![One clip, three inputs, one sentence back: frames and a speech transcript of the clip, plus our prompt text, go into Qwen3-VL-4B, which answers yes or no with a one-sentence reason; the probability of yes is the score.](docs/assets/og.png)
 
 P0 asks "Is this video brainrot?" with no definition; P1 adds our definition of split-screen sludge and four look-alike cases that do not count ([`prompts/`](prompts/)). The model answers yes or no; the score is the probability it gives to "yes" at that token.
 

@@ -97,7 +97,7 @@
 
     <div class="card pipe">
       <svg class="pipe-svg" viewBox="0 0 1256 300" role="img" aria-labelledby="pipe-title">
-        <title id="pipe-title">Pipeline: a short clip becomes frames (image) and a speech transcript (text); together with the prompt text they go into Qwen3-VL-4B, which writes a score and a one-sentence reason; the score decides warn or pass.</title>
+        <title id="pipe-title">Pipeline: a short clip becomes frames (image) and a speech transcript (text); together with the prompt text they go into Qwen3-VL-4B, which answers yes or no with a one-sentence reason; the probability it gives to yes is the score, which decides warn or pass.</title>
         <defs>
           <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8f98"/></marker>
           <marker id="aht" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0b8a78"/></marker>
@@ -139,11 +139,15 @@
         <!-- output -->
         <path d="M780 148 L 836 148" fill="none" stroke="#0b8a78" stroke-width="2" marker-end="url(#aht)"/>
         <rect x="840" y="88" width="230" height="120" rx="12" fill="#e3f4f1" stroke="#0b8a78" stroke-width="1.4"/>
-        <text x="856" y="110" font-size="14.5" font-weight="700" fill="#0b8a78">Text out</text>
-        <text class="mono" x="856" y="134" font-size="12" fill="#20635a">{"score": 1.00,</text>
-        <text class="mono" x="856" y="152" font-size="12" fill="#20635a" xml:space="preserve"> "reason": "Two unrelated</text>
-        <text class="mono" x="856" y="170" font-size="12" fill="#20635a" xml:space="preserve">  scenes play at the</text>
-        <text class="mono" x="856" y="188" font-size="12" fill="#20635a" xml:space="preserve">  same time …"}</text>
+        <!-- c020's real P1 output (start of it); the score is the model's probability for "yes" -->
+        <text x="856" y="107" font-size="14.5" font-weight="700" fill="#0b8a78">Text out</text>
+        <text x="1056" y="107" text-anchor="end" font-size="10.5" fill="#5c8f87">clip c020 · P1</text>
+        <text class="mono" x="856" y="125" font-size="11" fill="#20635a">{"brainrot": "yes",</text>
+        <text class="mono" x="856" y="139.5" font-size="11" fill="#20635a" xml:space="preserve"> "code": "B1",</text>
+        <text class="mono" x="856" y="154" font-size="11" fill="#20635a" xml:space="preserve"> "reason": "The video</text>
+        <text class="mono" x="856" y="168.5" font-size="11" fill="#20635a" xml:space="preserve">  displays two unrelated …"}</text>
+        <line x1="856" y1="178" x2="1054" y2="178" stroke="#a9dcd4"/>
+        <text x="856" y="197" font-size="12.5" font-weight="700" fill="#0b8a78">score = P(“yes”) = 1.00</text>
         <!-- decision -->
         <path d="M1070 128 C 1100 128, 1100 92, 1124 92" fill="none" stroke="#8a8f98" stroke-width="2" marker-end="url(#ah)"/>
         <path d="M1070 168 C 1100 168, 1100 204, 1124 204" fill="none" stroke="#8a8f98" stroke-width="2" marker-end="url(#ah)"/>
@@ -164,7 +168,7 @@
         <div class="arrow">↓</div>
         <div class="m"><b>Qwen3-VL-4B</b> · no training</div>
         <div class="arrow">↓</div>
-        <div class="x"><b>Text out</b> · score + one-sentence reason <span class="tag text">TEXT</span></div>
+        <div class="x"><b>Text out</b> · yes/no + one-sentence reason; score = P(“yes”) <span class="tag text">TEXT</span></div>
         <div class="verdicts"><span class="w"><svg class="ico"><use href="#i-warn"/></svg>Warn</span><span class="p"><svg class="ico"><use href="#i-check"/></svg>Pass</span></div>
       </div>
       <p class="body caption"><b>Text is used three times:</b> the clip’s speech goes in as a transcript, our definition goes in as prompt text, and the verdict comes out as a score with a one-sentence reason.</p>
